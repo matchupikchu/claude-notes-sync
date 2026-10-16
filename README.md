@@ -12,7 +12,9 @@ Notatki z sesji Claude Code: zapis automatyczny i wysyłanie na GitHuba
 | `AutoGit-o-Matic/` | submoduł, przypięty do `v3.0.0` |
 | `notes-sync.conf` | konfiguracja: katalog notatek, nazwa katalogu podsumowań, URL zdalnego repo, gałąź |
 | `lib/config.sh` | wspólne wczytywanie konfiguracji (hook i push) |
-| `install.sh` | pobiera submoduł, linkuje hook i polecenie `push-notes` |
+| `skills/podsumuj-dzien/` | skill `/podsumuj-dzien [RRRR-MM-DD]`: podsumowanie dnia zapisywane w katalogu tego dnia jako `podsumowanie_<dzień>.md` |
+| `notes-day.sh` | wypisuje notatki z jednego dnia (używany przez skill) |
+| `install.sh` | pobiera submoduł, linkuje hook, skill i polecenie `push-notes` |
 
 ## Układ notatek
 
@@ -21,7 +23,8 @@ Notatki z sesji Claude Code: zapis automatyczny i wysyłanie na GitHuba
 └── podsumowania/          (nazwa: NOTES_SUMMARY_DIR)
     ├── 2026-10-16/
     │   ├── sesja_2026-10-16_11-21-23_UTC.md
-    │   └── sesja_2026-10-16_11-32-07_UTC.md
+    │   ├── sesja_2026-10-16_11-32-07_UTC.md
+    │   └── podsumowanie_2026-10-16.md   (/podsumuj-dzien)
     └── 2026-10-17/
         └── ...
 ```
