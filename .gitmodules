@@ -1,0 +1,3 @@
+[submodule "AutoGit-o-Matic"]
+	path = AutoGit-o-Matic
+	url = https://github.com/FPGArtktic/AutoGit-o-Matic.git
