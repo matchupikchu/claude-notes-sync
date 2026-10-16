@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # SessionEnd hook: zapisuje notatkę .md z podsumowaniem pracy wykonanej w sesji.
-# Ścieżka: <NOTES_DIR>/podsumowania/RRRR-MM-DD/sesja_RRRR-MM-DD_GG-MM-SS_UTC.md
+# Ścieżka: <NOTES_DIR>/<NOTES_SUMMARY_DIR>/RRRR-MM-DD/sesja_RRRR-MM-DD_GG-MM-SS_UTC.md
 # (czas zakończenia sesji, UTC; każdy dzień w osobnym katalogu).
-# NOTES_DIR pochodzi z notes-sync.conf (domyślnie ~/notatki-claude).
+# NOTES_DIR i NOTES_SUMMARY_DIR pochodzą z notes-sync.conf
+# (domyślnie ~/notatki-claude i podsumowania).
 
 # Nie twórz notatek dla sesji uruchomionej przez sam ten skrypt.
 [ -n "$CLAUDE_SESSION_NOTE_CHILD" ] && exit 0
@@ -43,7 +44,7 @@ ts_human=$(date -u -d "@$now" '+%Y-%m-%d %H:%M:%S UTC')
 day=$(date -u -d "@$now" +%Y-%m-%d)
 # shellcheck source=../lib/config.sh
 . "$(dirname "$(readlink -f "$0")")/../lib/config.sh" ""
-notes_dir="${NOTES_DIR/#\~/$HOME}/podsumowania/$day"
+notes_dir="${NOTES_DIR/#\~/$HOME}/$NOTES_SUMMARY_DIR/$day"
 out="$notes_dir/sesja_${ts}_UTC.md"
 mkdir -p "$notes_dir"
 

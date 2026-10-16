@@ -7,10 +7,10 @@ Notatki z sesji Claude Code: zapis automatyczny i wysyłanie na GitHuba
 
 | plik | co robi |
 |------|---------|
-| `hooks/session-note.sh` | hook `SessionEnd`: po każdej sesji zapisuje podsumowanie (Haiku) do `<NOTES_DIR>/podsumowania/RRRR-MM-DD/sesja_<czas UTC>_UTC.md` |
+| `hooks/session-note.sh` | hook `SessionEnd`: po każdej sesji zapisuje podsumowanie (Haiku) do `<NOTES_DIR>/<NOTES_SUMMARY_DIR>/RRRR-MM-DD/sesja_<czas UTC>_UTC.md` |
 | `push-notes.sh` | commituje notatki w `~/notatki-claude`, robi fetch przez AutoGit-o-Matic, rebase na `origin/main` i `git push` |
 | `AutoGit-o-Matic/` | submoduł, przypięty do `v3.0.0` |
-| `notes-sync.conf` | konfiguracja: katalog notatek, URL zdalnego repo, gałąź |
+| `notes-sync.conf` | konfiguracja: katalog notatek, nazwa katalogu podsumowań, URL zdalnego repo, gałąź |
 | `lib/config.sh` | wspólne wczytywanie konfiguracji (hook i push) |
 | `install.sh` | pobiera submoduł, linkuje hook i polecenie `push-notes` |
 
@@ -18,7 +18,7 @@ Notatki z sesji Claude Code: zapis automatyczny i wysyłanie na GitHuba
 
 ```
 ~/notatki-claude/            (osobne repo git → notes_work)
-└── podsumowania/
+└── podsumowania/          (nazwa: NOTES_SUMMARY_DIR)
     ├── 2026-10-16/
     │   ├── sesja_2026-10-16_11-21-23_UTC.md
     │   └── sesja_2026-10-16_11-32-07_UTC.md
@@ -41,15 +41,20 @@ Edytuj `notes-sync.conf`:
 
 ```sh
 NOTES_DIR="$HOME/notatki-claude"
+NOTES_SUMMARY_DIR="podsumowania"
 NOTES_REMOTE="git@github.com:matchupikchu/notes_work.git"
 NOTES_BRANCH="main"
 ```
+
+`NOTES_SUMMARY_DIR` to nazwa katalogu (wewnątrz `NOTES_DIR`) na podsumowania
+sesji; może być zagnieżdżona, np. `claude/podsumowania`. Zmiana dotyczy tylko
+nowych notatek — istniejące przenieś ręcznie (`git mv`), jeśli mają być razem.
 
 Hook `SessionEnd` też czyta `NOTES_DIR` z tego pliku, więc nowe notatki trafiają
 tam, skąd są wysyłane. Jednorazowo można to nadpisać (od najważniejszego):
 
 1. opcje: `push-notes --notes-dir DIR --remote URL --branch NAZWA --config PLIK`
-2. zmienne środowiskowe: `NOTES_DIR`, `NOTES_REMOTE`, `NOTES_BRANCH`, `NOTES_SYNC_CONFIG`
+2. zmienne środowiskowe: `NOTES_DIR`, `NOTES_SUMMARY_DIR`, `NOTES_REMOTE`, `NOTES_BRANCH`, `NOTES_SYNC_CONFIG`
 3. plik `notes-sync.conf`
 
 Zmiana `NOTES_REMOTE` przy następnym uruchomieniu przestawia `origin` w repo notatek.
