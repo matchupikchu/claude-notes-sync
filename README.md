@@ -7,6 +7,10 @@ A `SessionEnd` hook condenses the transcript, has Haiku summarise it, and drops 
 Markdown note into a per-day directory. `push-notes` commits those notes and pushes
 them to a repository of your own.
 
+Setting up the whole Claude Code environment this repository is a part of (Claude Code,
+the jCodeMunch and WEFT MCP servers, RAG over PDFs, these notes): [SETUP.md](SETUP.md),
+written as a runbook an agent can execute on a fresh machine.
+
 ## Contents
 
 | file | what it does |
