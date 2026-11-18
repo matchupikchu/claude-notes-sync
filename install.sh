@@ -1,17 +1,24 @@
 #!/usr/bin/env bash
-# Instaluje notes-sync: pobiera submoduł AutoGit-o-Matic, podpina hook
-# SessionEnd i skill /podsumuj-dzien do ~/.claude oraz polecenie push-notes do ~/.local/bin.
+# Installs notes-sync: fetches the AutoGit-o-Matic submodule, links the
+# SessionEnd hook and the /summarize-day skill into ~/.claude, and the
+# push-notes command into ~/.local/bin.
 set -euo pipefail
 here="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
 
 git -C "$here" submodule update --init
 chmod +x "$here/push-notes.sh" "$here/notes-day.sh" "$here/hooks/session-note.sh"
 
-mkdir -p "$HOME/.claude/hooks" "$HOME/.local/bin"
+mkdir -p "$HOME/.claude/hooks" "$HOME/.local/bin" "$HOME/.claude/skills"
 ln -sfn "$here/hooks/session-note.sh" "$HOME/.claude/hooks/session-note.sh"
 ln -sfn "$here/push-notes.sh" "$HOME/.local/bin/push-notes"
-mkdir -p "$HOME/.claude/skills"
-ln -sfn "$here/skills/podsumuj-dzien" "$HOME/.claude/skills/podsumuj-dzien"
+ln -sfn "$here/skills/summarize-day" "$HOME/.claude/skills/summarize-day"
 
-echo "Gotowe. Hook: ~/.claude/hooks/session-note.sh, polecenie: push-notes"
-echo "Upewnij się, że ~/.claude/settings.json ma hook SessionEnd wskazujący na ten plik."
+# The skill used to be called podsumuj-dzien; drop the dangling link it left.
+legacy="$HOME/.claude/skills/podsumuj-dzien"
+if [ -L "$legacy" ] && [ ! -e "$legacy" ]; then
+  rm -f "$legacy"
+  echo "Removed the stale symlink $legacy (the skill is now /summarize-day)."
+fi
+
+echo "Done. Hook: ~/.claude/hooks/session-note.sh, command: push-notes"
+echo "Make sure ~/.claude/settings.json has a SessionEnd hook pointing at that file."
