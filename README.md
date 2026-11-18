@@ -71,3 +71,11 @@ fetch, logowanie i raport `--status`.
 
 Klucz SSH (`~/.ssh/id_ed25519.pub`) dodany na GitHubie
 (Settings → SSH and GPG keys) z dostępem do `notes_work`.
+
+## Licencja
+
+Kod w tym repozytorium: [MIT](LICENSE).
+
+Submoduł `AutoGit-o-Matic/` nie jest objęty tą licencją — to osobny projekt na
+[GPL-3.0](https://github.com/FPGArtktic/AutoGit-o-Matic), używany jako zewnętrzne
+polecenie i pobierany przy `git submodule update --init`.
